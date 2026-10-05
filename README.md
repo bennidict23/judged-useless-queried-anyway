@@ -20,6 +20,7 @@ evidence only when the harness enforces the integration step.
 | add the enforced integration step to my agent harness | [Add the integration step](#add-the-integration-step-to-your-harness) |
 | reuse the prompts (agent, conditions, side-channel question, belief probe) | [`prompts/`](prompts) |
 | run any model in the controlled source-failure environment (HotpotQA, FEVER) and score it | [`experiments/`](experiments) |
+| get the step-by-step judgments and actions of every model and condition in the paper, and reproduce its numbers | [`data/`](data) |
 
 ## Install
 
@@ -125,10 +126,20 @@ judged_useless/   toolkit: Δ, answer rate after k useless judgments, the integr
 examples/         example episodes in the toolkit's format and runnable examples
 prompts/          every prompt used in the paper, as plain text
 experiments/      the source-failure environment, agents and conditions, and evaluate.py to score a run
+data/             every episode of the paper's main experiments, and a script that reproduces Figure 3 and Table 2
 ```
 
-The full trajectories behind the paper (all models, conditions and failure regimes, with per-step judgments, beliefs
-and actions) and the annotation labels are being prepared as a dataset; this section will link to it.
+## Data
+
+[`data/episodes/`](data/episodes) holds every episode of the paper's main experiments in the toolkit's format: four
+open models in eight conditions on the 300 test questions, and the replication on 300 fresh questions, with the
+agent's judgment of every observation, its actions and whether it answered correctly (43 files, under 1 MB).
+
+```bash
+python data/reproduce_paper.py   # recomputes every Δ in Figure 3 and every mean6 in Table 2; all 43 cells match
+```
+
+The full trajectories (with the agents' text) and the annotation labels will be added later.
 
 ## Citation
 
@@ -142,5 +153,5 @@ and actions) and the annotation labels are being prepared as a dataset; this sec
 
 ## License
 
-Code: MIT. HotpotQA (CC BY-SA 4.0) and the FEVER claims and Wikipedia pages in `experiments/fever_data.json` (CC BY-SA 3.0)
+Code: MIT. Episode data in `data/`: CC BY 4.0. HotpotQA (CC BY-SA 4.0) and the FEVER claims and Wikipedia pages in `experiments/fever_data.json` (CC BY-SA 3.0)
 keep their original licenses.

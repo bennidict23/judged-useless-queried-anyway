@@ -20,6 +20,7 @@ clusters (questions). No dependencies beyond the standard library.
 from __future__ import annotations
 
 import collections
+import gzip
 import json
 import random
 from typing import Iterable, Iterator, Mapping, Sequence
@@ -27,9 +28,10 @@ from typing import Iterable, Iterator, Mapping, Sequence
 USELESS = "USELESS"
 
 
-def load_jsonl(path: str) -> list[dict]:
-    """Read trajectories from a JSON-lines file."""
-    with open(path) as f:
+def load_jsonl(path) -> list[dict]:
+    """Read trajectories from a JSON-lines file (plain or .gz)."""
+    opener = gzip.open if str(path).endswith(".gz") else open
+    with opener(path, "rt") as f:
         return [json.loads(line) for line in f if line.strip()]
 
 
