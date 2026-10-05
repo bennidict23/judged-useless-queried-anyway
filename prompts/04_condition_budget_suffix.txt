@@ -1,0 +1,1 @@
+You can take at most 8 actions for each question, including finish. If you have not used finish[answer] by then, the question is scored as wrong.

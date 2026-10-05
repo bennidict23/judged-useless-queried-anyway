@@ -1,0 +1,4 @@
+Pause. Before deciding anything, assess the LATEST observation only.
+Question: does the latest observation provide information that helps answer the original question?
+Reply with a single JSON object and nothing else:
+{"usefulness": one of "USEFUL_NEW" (new information that answers part of the question or gives a concrete clue), "REDUNDANT" (relevant but already seen earlier), "RELATED_NOT_ANSWERING" (about the question's subject but does not advance it), "OFF_TOPIC" (unrelated), "UNSURE"; "reason": one short sentence}

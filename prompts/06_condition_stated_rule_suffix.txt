@@ -1,0 +1,1 @@
+Stopping policy: if five consecutive search or lookup results in a row are useless for answering the question, stop consulting the knowledge base and answer from your own knowledge with finish[answer].

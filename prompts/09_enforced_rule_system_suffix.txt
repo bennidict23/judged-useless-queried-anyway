@@ -1,0 +1,1 @@
+For this turn only, the search and lookup actions are unavailable; the only available action is finish[answer].

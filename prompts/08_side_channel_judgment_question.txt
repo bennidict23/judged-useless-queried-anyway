@@ -1,0 +1,1 @@
+Before acting: was the LAST observation useful for answering the original question? Reply with exactly one word: USEFUL or USELESS.

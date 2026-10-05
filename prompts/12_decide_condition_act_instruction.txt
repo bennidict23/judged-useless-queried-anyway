@@ -1,0 +1,1 @@
+Now continue in the required format (Thought / Action / Action Input), acting consistently with your decision: CONTINUE means a search or lookup action; ANSWER_NOW means the finish action with your best short answer to the original question as the Action Input.

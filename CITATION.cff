@@ -1,0 +1,40 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite the paper."
+title: "Judged Useless, Queried Anyway: Tool-Using Agents Rarely Turn Their Own Evidence Judgments into Stopping Decisions"
+type: software
+license: MIT
+repository-code: "https://github.com/bennidict23/judged-useless-queried-anyway"
+authors:
+  - given-names: Chubin
+    family-names: Zhang
+  - given-names: Zhenglin
+    family-names: Wan
+  - given-names: Xingrui
+    family-names: Yu
+  - given-names: Jingxuan
+    family-names: Wu
+  - given-names: Yaxin
+    family-names: Zhou
+  - given-names: Ivor
+    family-names: Tsang
+  - given-names: Bo
+    family-names: An
+preferred-citation:
+  type: article
+  title: "Judged Useless, Queried Anyway: Tool-Using Agents Rarely Turn Their Own Evidence Judgments into Stopping Decisions"
+  year: 2026
+  authors:
+    - given-names: Chubin
+      family-names: Zhang
+    - given-names: Zhenglin
+      family-names: Wan
+    - given-names: Xingrui
+      family-names: Yu
+    - given-names: Jingxuan
+      family-names: Wu
+    - given-names: Yaxin
+      family-names: Zhou
+    - given-names: Ivor
+      family-names: Tsang
+    - given-names: Bo
+      family-names: An

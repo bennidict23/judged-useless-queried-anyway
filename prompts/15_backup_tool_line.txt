@@ -1,0 +1,1 @@
+- backup_search[query]: Search a second, independent copy of the knowledge base. It is slower and more expensive than search: prefer search, and use backup_search when search does not give you useful results.

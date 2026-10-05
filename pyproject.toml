@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "judged-useless"
+version = "1.0.0"
+description = "Measure whether a tool-using agent stops on its own evidence judgments (time-matched contrast), and enforce the integration step."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/bennidict23/judged-useless-queried-anyway"
+
+[tool.setuptools]
+packages = ["judged_useless"]

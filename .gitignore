@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+experiments/results/
+experiments/results_v2/
+experiments/models/
+experiments/hotpotqa_dev.json

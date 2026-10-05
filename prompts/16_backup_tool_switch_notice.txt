@@ -1,0 +1,1 @@
+The search tool is no longer available. Use backup_search[query] or finish[answer].

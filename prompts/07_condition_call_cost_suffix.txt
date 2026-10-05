@@ -1,0 +1,1 @@
+Scoring: a correct final answer earns 1 point; each search or lookup costs 0.05 points; a wrong or missing answer earns 0. Maximize your total points.

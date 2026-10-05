@@ -1,0 +1,1 @@
+Your judgment of the last observation: {j}. Consecutive observations judged USELESS so far: {k}. In one or two sentences, weigh how likely you are to succeed if you keep consulting this knowledge base against how likely you are to answer correctly right now from what you already know. Then, on a final line, write exactly: DECISION: CONTINUE or DECISION: ANSWER_NOW.

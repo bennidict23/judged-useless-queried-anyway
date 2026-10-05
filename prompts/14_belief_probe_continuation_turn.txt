@@ -1,0 +1,6 @@
+Pause. Before deciding anything, give an honest assessment of your situation.
+You have {remaining} tool interactions left with this knowledge base. Estimate two probabilities, each between 0 and 1:
+- p_continue: the probability that you would end up answering the original question correctly if you kept consulting this knowledge base with the remaining interactions;
+- p_answer_now: the probability that you would answer correctly if you gave your best answer right now from what you already know.
+Reply with a single JSON object and nothing else:
+{"p_continue": number, "p_answer_now": number, "prefer": one of "continue", "answer_now", "unsure", "reason": one short sentence}
