@@ -100,27 +100,18 @@ from a bootstrap over questions.
 
 ## 🔧 Add the integration step
 
-Let the harness, not the prompt, turn the agent's judgments into the stopping decision:
+Let the harness, not the prompt, act on the agent's judgments: once five results in a row are judged useless, leave
+the agent only the answer action.
 
 ```python
-from judged_useless import IntegrationRule, stated_judgment, FORCE_SYSTEM_SUFFIX, FORCE_USER_MESSAGE
+from judged_useless import IntegrationRule, stated_judgment
 
-rule = IntegrationRule(k=5, source="stated")   # or source="side_channel"
-for step in episode:
-    thought, action = agent.propose(history)                 # your agent's next turn
-    if step > 0 and rule.update(stated_judgment(thought)):   # judgment of the latest observation
-        system_prompt += FORCE_SYSTEM_SUFFIX                 # from now on only the answer action remains
-        history[-1] += "\n\n" + FORCE_USER_MESSAGE
-        thought, action = agent.propose(history)
-    ...
+rule = IntegrationRule(k=5, source="stated")    # or "side_channel" for judgments from the side-channel question
+if rule.update(stated_judgment(thought)):       # after each observation, on the agent's latest thought
+    ...                                         # allow only the answer action from now on
 ```
 
-- `source="stated"` reads the agent's own thought with `stated_judgment()`: USEFUL resets the run, and a thought with
-  no explicit judgment leaves it unchanged.
-- `source="side_channel"` takes the reply to `SIDE_CHANNEL_QUESTION`, asked on a scratch copy of the conversation
-  after each observation and parsed with `parse_side_channel()`; any reply other than USELESS resets the run.
-
-A runnable toy example is in [`examples/harness_example.py`](examples/harness_example.py).
+`python examples/harness_example.py` shows it in a complete agent loop, with the prompts that switch to answering.
 
 ## 📊 Reproduce the paper
 
@@ -161,19 +152,6 @@ python evaluate.py results_v2/<run dir>      # success per regime, mean6 and Δ
 ```
 
 Every condition, model and script is listed in [`experiments/README.md`](experiments/README.md).
-
-<details>
-<summary><b>📁 Repository layout</b></summary>
-<br>
-
-```
-judged_useless/   toolkit: Δ, answer rate after k useless judgments, the integration rule, the keyword reader
-examples/         example episodes and runnable examples
-prompts/          every prompt used in the paper, as plain text
-experiments/      the source-failure environment, agents and conditions, and evaluate.py to score a run
-data/             every episode of the paper's main experiments, and the script that reproduces its numbers
-```
-</details>
 
 ## 📝 Citation
 
