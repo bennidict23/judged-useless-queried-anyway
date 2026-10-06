@@ -22,7 +22,6 @@ Chubin Zhang<sup>1</sup>, Zhenglin Wan<sup>2</sup>, Xingrui Yu<sup>3</sup>, Jing
 <br>
 
 <p align="center"><img src="assets/teaser.png" width="100%"></p>
-<p align="center"><sub><b>Left:</b> a real trajectory of Claude Haiku 4.5 with a persistently failing source. It calls every result irrelevant and recalls at step 6 that Barlow is in a band, yet searches until its budget runs out; with the enforced rule, it answers correctly. <b>Right:</b> how often each agent judged a failing source's result useless (red), and how often the unaided agent answered after five useless judgments in a row (gray). *Judgments from its enforced-rule run on the same questions.</sub></p>
 
 When a tool keeps returning nothing useful, an agent should stop relying on it. The agents we test know when that
 happens, but they do not act on it:
@@ -63,8 +62,10 @@ useless with how often it answers when the latest result was judged useless but 
 To measure it on your own agent, log each episode's actions and the agent's one-word judgment of each observation,
 and pass the episodes to the toolkit. The format and a short example are in [examples/README.md](examples/README.md).
 
+Across the models and conditions in the paper, only the enforced rule makes Δ positive for every model (in
+parentheses: the replication on 300 fresh questions):
+
 <p align="center"><img src="assets/delta_heatmap.png" width="800"></p>
-<p align="center"><sub>Δ for every model and condition in the paper (blue: Δ > 0, red: Δ < 0; replication on 300 fresh questions in parentheses). Only the enforced rule, alone or combined with the budget, makes Δ positive for every model.</sub></p>
 
 ## 🔧 Add the integration step
 
