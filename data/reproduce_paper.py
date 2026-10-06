@@ -1,6 +1,6 @@
-"""Recompute every Δ in Figure 3 and every mean6 in Table 2 of the paper from the released episodes (no GPU needed).
+"""Recompute every Δ in Figure 3 and the open models' mean6 in Table 2 of the paper from the released episodes.
 
-    python data/reproduce_paper.py            # a few minutes
+    python data/reproduce_paper.py            # about a minute on a CPU
     python data/reproduce_paper.py --boot 200 # faster, intervals then differ slightly from the paper
 """
 import argparse

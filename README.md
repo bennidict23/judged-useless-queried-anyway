@@ -1,83 +1,106 @@
+<div align="center">
+
 # Judged Useless, Queried Anyway
 
-Code, prompts and data for the paper **Judged Useless, Queried Anyway: Tool-Using Agents Rarely Turn Their Own Evidence Judgments into Stopping Decisions**
-(Chubin Zhang, Zhenglin Wan, Xingrui Yu, Jingxuan Wu, Yaxin Zhou, Ivor Tsang, Bo An).
+**Tool-Using Agents Rarely Turn Their Own Evidence Judgments into Stopping Decisions**
 
-**Paper:** [arXiv:2610.06191](https://arxiv.org/abs/2610.06191)
+Chubin Zhang<sup>1</sup>, Zhenglin Wan<sup>2</sup>, Xingrui Yu<sup>3,4‡</sup>, Jingxuan Wu<sup>5</sup>, Yaxin Zhou<sup>6</sup>, Ivor Tsang<sup>1,3,4</sup>, Bo An<sup>1</sup>
 
-When a tool keeps returning nothing useful, an agent should stop relying on it. The agents we test call a failing
-source's results useless almost every time, yet after five such judgments in a row they rarely answer:
+<sub><sup>1</sup>Nanyang Technological University &nbsp; <sup>2</sup>National University of Singapore &nbsp; <sup>3</sup>CFAR, A\*STAR &nbsp; <sup>4</sup>IHPC, A\*STAR &nbsp; <sup>5</sup>UNC-Chapel Hill &nbsp; <sup>6</sup>Carnegie Mellon University &nbsp; <sup>‡</sup>Corresponding author</sub>
 
-<p align="center"><img src="assets/judged_vs_answered.png" width="430"></p>
+<br>
 
-Telling them more (that they may answer from memory, the step budget, the stopping rule, the price of a call, or
-their running count of useless judgments) changes *when* they stop but not *what* they stop on. Stopping follows the
-evidence only when the harness enforces the integration step.
+[![arXiv](https://img.shields.io/badge/arXiv-2610.06191-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2610.06191)
+[![Data](https://img.shields.io/badge/Data-90k_episodes-2ea44f?style=for-the-badge)](data)
+[![Python](https://img.shields.io/badge/Python-3.9%2B_·_no_dependencies-3776ab?style=for-the-badge&logo=python&logoColor=white)](#quick-start)
+[![License](https://img.shields.io/badge/License-MIT-555555?style=for-the-badge)](LICENSE)
 
-## What you can do with this repository
+**[Quick start](#quick-start)** &nbsp;·&nbsp; **[Test your agent](#test-your-agent)** &nbsp;·&nbsp; **[Add the integration step](#add-the-integration-step)** &nbsp;·&nbsp; **[Reproduce the paper](#reproduce-the-paper)** &nbsp;·&nbsp; **[Citation](#citation)**
 
-| I want to ... | Where |
-|---|---|
-| test whether my agent's stopping follows its own judgments of its evidence | [Measure Δ on your agent](#measure-δ-on-your-agent) |
-| add the enforced integration step to my agent harness | [Add the integration step](#add-the-integration-step-to-your-harness) |
-| reuse the prompts (agent, conditions, side-channel question, belief probe) | [`prompts/`](prompts) |
-| run any model in the controlled source-failure environment (HotpotQA, FEVER) and score it | [`experiments/`](experiments) |
-| get the step-by-step judgments and actions of every model and condition in the paper, and reproduce its numbers | [`data/`](data) |
+</div>
 
-## Install
+<br>
+
+<p align="center"><img src="assets/judged_vs_answered.png" width="420"></p>
+<p align="center"><sub>Red: how often each agent judged a failing source's result useless. Gray: how often the unaided agent answered after five useless judgments in a row.</sub></p>
+
+When a tool keeps returning nothing useful, an agent should stop relying on it. The agents we test know when that
+happens, but they do not act on it:
+
+- **Agents judge correctly but do not act on their judgments.** They call a failing source's results useless 97–100%
+  of the time, yet their stopping ignores these judgments.
+- **Telling agents more changes when they stop, not what they stop on.** Permission to answer from memory, a step
+  budget, a stopping rule or a price per call written into the prompt, or the running count of useless judgments,
+  moves the stopping point without tying it to the evidence.
+- **An enforced integration step makes stopping follow the evidence.** When the harness leaves only `finish` after
+  five consecutive results the agent judged useless, success on a failing source rises for every model.
+- **The pattern replicates** on 300 fresh questions and on fact verification. A larger open model, a reasoning mode
+  and an RL-trained search agent still largely fail to stop on the evidence.
+
+## Quick start
 
 ```bash
-git clone https://github.com/bennidict23/judged-useless-queried-anyway.git
-cd judged-useless-queried-anyway
-pip install -e .          # the toolkit `judged_useless`: pure Python, no dependencies
-python examples/compute_delta.py
+pip install git+https://github.com/bennidict23/judged-useless-queried-anyway
 ```
 
-## Measure Δ on your agent
+| I want to ... | See |
+|---|---|
+| test whether my agent's stopping follows its own judgments of its evidence | [Test your agent](#test-your-agent) |
+| make my agent stop on them | [Add the integration step](#add-the-integration-step) |
+| reproduce the main results (Figure 3, Table 2) from the released episodes, on a CPU in about a minute | [Reproduce the paper](#reproduce-the-paper) |
+| run a model in the controlled source-failure environment (HotpotQA, FEVER) | [Run the environment](#run-the-environment) |
+| reuse the prompts: agent, conditions, side-channel question, belief probe | [`prompts/`](prompts) |
+
+## Test your agent
 
 Success alone cannot tell you what an agent's stopping responds to: an agent that stops at a fixed step, one that
 waits for the deadline and one that stops after enough useless evidence can score alike. The **time-matched contrast
-Δ** separates them. At the same decision step *t*, it compares the probability of answering when every result so far
-was judged useless with the probability of answering when the latest result was judged useless but an earlier one was
-judged useful.
+Δ** separates them. At the same step, it compares how often the agent answers when every result so far was judged
+useless with how often it answers when the latest result was judged useless but an earlier one was judged useful.
 
 | Δ | the agent's stopping ... |
-|---|---|
-| > 0 | integrates its own useless judgments |
-| ≈ 0 | follows the clock or the deadline |
-| < 0 | follows earlier useful evidence instead |
+|:---:|---|
+| **> 0** | integrates its own useless judgments |
+| **≈ 0** | follows the clock or the deadline |
+| **< 0** | follows earlier useful evidence instead |
 
-Record, for each episode, the actions and the agent's judgment of each observation (one JSON object per line):
+Record each episode as one JSON line with the agent's actions and its judgment of each observation:
 
 ```json
 {"question_id": "q17", "actions": ["search", "search", "lookup", "search", "finish"],
  "judgments": ["USELESS", "USEFUL", "USELESS", "USELESS"]}
 ```
 
-`judgments[k]` is the judgment of the observation returned by `actions[k]` (`"USELESS"`, `"USEFUL"` or `null`).
-The judgments can come from a side-channel question asked on a copy of the conversation
-([`prompts/08_side_channel_judgment_question.txt`](prompts/08_side_channel_judgment_question.txt)) or from the
-agent's own reasoning, read with `stated_judgment()` at no extra cost.
-
 ```python
 from judged_useless import load_jsonl, time_matched_contrast, answer_rate_after_run
 
-episodes = load_jsonl("examples/qwen3-8b_unaided_test300.jsonl")
-time_matched_contrast(episodes)      # {'delta': -0.065, 'ci_low': -0.095, 'ci_high': -0.039, 'cells': {...}, ...}
-answer_rate_after_run(episodes, k=5) # how often the agent answers once it has judged 5 results in a row useless
+episodes = load_jsonl("my_episodes.jsonl")   # or one of the files in examples/ or data/episodes/
+time_matched_contrast(episodes)              # {'delta': -0.065, 'ci_low': -0.095, 'ci_high': -0.039, ...}
+answer_rate_after_run(episodes, k=5)         # how often it answers after 5 useless judgments in a row
 ```
 
-The two example files are the unaided Qwen3-8B agent (Δ = −0.065) and the same agent with the enforced rule
-(Δ = +0.329) on our 300 test questions, exactly as reported in the paper. Δ pools decisions after 3 to 6 observations (`t_min`, `t_max`) and
-excludes the final action of the eight-action budget, which is the last chance to answer; with a budget of *B*
-actions, use `t_max = B - 2`. Δ needs both kinds of histories at the same step, so collect episodes in which a source
-fails from the start as well as episodes in which it fails later or recovers (as in our failure regimes).
-Intervals come from a bootstrap over questions.
+`judgments[k]` judges the observation returned by `actions[k]` (`"USELESS"`, `"USEFUL"` or `null`). Get the judgments
+by asking a one-word question on a copy of the conversation
+([`prompts/08_side_channel_judgment_question.txt`](prompts/08_side_channel_judgment_question.txt)), or read them from
+the agent's own reasoning at no extra cost with `stated_judgment()`.
 
-<p align="center"><img src="assets/delta_heatmap.png" width="760"></p>
-<p align="center"><sub>Δ for every model and condition in the paper (blue: Δ > 0; red: Δ < 0; fresh-question replication in parentheses).</sub></p>
+<p align="center"><img src="assets/delta_heatmap.png" width="800"></p>
+<p align="center"><sub>Δ for every model and condition in the paper (blue: Δ > 0, red: Δ < 0; replication on 300 fresh questions in parentheses). Only the enforced rule, alone or combined with the budget, makes Δ positive for every model.</sub></p>
 
-## Add the integration step to your harness
+<details>
+<summary><b>Which decisions Δ uses</b></summary>
+<br>
+
+Δ pools the decisions after 3 to 6 observations (`t_min`, `t_max`) and leaves out the final action of the
+eight-action budget, which is the last chance to answer; with a budget of *B* actions, use `t_max = B - 2`. It needs
+both kinds of histories at the same step, so collect episodes in which a source fails from the start as well as
+episodes in which it fails later or recovers. Cells are pooled with Mantel–Haenszel weights, and the interval comes
+from a bootstrap over questions.
+</details>
+
+## Add the integration step
+
+Let the harness, not the prompt, turn the agent's judgments into the stopping decision:
 
 ```python
 from judged_useless import IntegrationRule, stated_judgment, FORCE_SYSTEM_SUFFIX, FORCE_USER_MESSAGE
@@ -92,16 +115,42 @@ for step in episode:
     ...
 ```
 
-`source="side_channel"`: after each observation, ask `SIDE_CHANNEL_QUESTION` on a scratch copy of the conversation and
-pass `parse_side_channel(reply)`; any reply other than USELESS resets the run.
-`source="stated"`: read the agent's own thought with `stated_judgment()`; USEFUL resets the run and a thought with no
-explicit judgment leaves it unchanged. A runnable toy example is in [`examples/harness_example.py`](examples/harness_example.py).
+- `source="stated"` reads the agent's own thought with `stated_judgment()`: USEFUL resets the run, and a thought with
+  no explicit judgment leaves it unchanged.
+- `source="side_channel"` takes the reply to `SIDE_CHANNEL_QUESTION`, asked on a scratch copy of the conversation
+  after each observation and parsed with `parse_side_channel()`; any reply other than USELESS resets the run.
 
-## The source-failure environment
+A runnable toy example is in [`examples/harness_example.py`](examples/harness_example.py).
 
-Questions come from the HotpotQA distractor development set; each question has its own knowledge base of its ten
-paragraphs, and the agent has `search`, `lookup` and `finish` with an eight-action budget. A failed observation is
-replaced by a paragraph from another question's knowledge base, so whether each result is useful is known.
+## Reproduce the paper
+
+[`data/episodes/`](data) holds every episode of the paper's main experiments: four open models in eight conditions on
+300 test questions, and the replication on 300 fresh questions, with the agent's judgment of every observation, its
+actions and whether it answered correctly (43 files, under 1 MB). One command recomputes every Δ in Figure 3 and the open models' success rates in Table 2:
+
+```bash
+git clone https://github.com/bennidict23/judged-useless-queried-anyway.git
+cd judged-useless-queried-anyway
+python data/reproduce_paper.py
+```
+
+```
+test300: Δ on the agent's own judgments [95% interval], and mean6 success
+model        condition                                Δ   mean6  matches paper
+qwen3-8b     unaided        -0.065 [-0.095, -0.039]   0.448  yes
+qwen3-8b     enforced_rule  +0.329 [+0.286, +0.373]   0.474  yes
+...
+43 of 43 cells match the paper.
+```
+
+The fields are described in [`data/README.md`](data/README.md). The full trajectories, with the agents' text, and the
+annotation labels will be added later.
+
+## Run the environment
+
+Questions come from the HotpotQA distractor development set, each with its own knowledge base of ten paragraphs. The
+agent has `search`, `lookup` and `finish` and a budget of eight actions. A failed observation is replaced by a
+paragraph from another question's knowledge base, so whether each result is useful is known.
 
 | regime | which observations fail |
 |---|---|
@@ -110,54 +159,46 @@ replaced by a paragraph from another question's knowledge base, so whether each 
 | `recover_after_1`, `_2`, `_3` | the first 1, 2 or 3 |
 | `late_onset_from_3` | the third and every later one |
 
-Harder failures (`plausible`: the question's own distractor paragraphs; `answerless`: its own pages with the supporting
-facts removed), longer recoveries, a backup tool and FEVER fact verification are also included. Question lists:
-[`experiments/manifests/`](experiments/manifests) (`dev100` for development, `test300` for the main results,
-`fresh300` for a fresh replication). To run a model and score it, see [`experiments/README.md`](experiments/README.md):
+Harder failures (`plausible`: the question's own distractor paragraphs; `answerless`: its own pages without the
+supporting facts), longer recoveries, a backup tool and FEVER fact verification are included too.
 
 ```bash
+pip install -r requirements.txt   # vLLM for open models, anthropic for Claude
 cd experiments
 python run_gate2.py --arm rule_k5_side --model qwen3-8b --split test300 --gpu 0
 python evaluate.py results_v2/<run dir>      # success per regime, mean6 and Δ
 ```
 
-## Repository layout
+Every condition, model and script is listed in [`experiments/README.md`](experiments/README.md).
+
+<details>
+<summary><b>Repository layout</b></summary>
+<br>
 
 ```
 judged_useless/   toolkit: Δ, answer rate after k useless judgments, the integration rule, the keyword reader
-examples/         example episodes in the toolkit's format and runnable examples
+examples/         example episodes and runnable examples
 prompts/          every prompt used in the paper, as plain text
 experiments/      the source-failure environment, agents and conditions, and evaluate.py to score a run
-data/             every episode of the paper's main experiments, and a script that reproduces Figure 3 and Table 2
+data/             every episode of the paper's main experiments, and the script that reproduces its numbers
 ```
-
-## Data
-
-[`data/episodes/`](data/episodes) holds every episode of the paper's main experiments in the toolkit's format: four
-open models in eight conditions on the 300 test questions, and the replication on 300 fresh questions, with the
-agent's judgment of every observation, its actions and whether it answered correctly (43 files, under 1 MB).
-
-```bash
-python data/reproduce_paper.py   # recomputes every Δ in Figure 3 and every mean6 in Table 2; all 43 cells match
-```
-
-The full trajectories (with the agents' text) and the annotation labels will be added later.
+</details>
 
 ## Citation
 
 ```bibtex
 @misc{zhang2026judgeduseless,
-  title  = {Judged Useless, Queried Anyway: Tool-Using Agents Rarely Turn Their Own Evidence Judgments into Stopping Decisions},
-  author = {Zhang, Chubin and Wan, Zhenglin and Yu, Xingrui and Wu, Jingxuan and Zhou, Yaxin and Tsang, Ivor and An, Bo},
-  year   = {2026},
-  eprint = {2610.06191},
+  title         = {Judged Useless, Queried Anyway: Tool-Using Agents Rarely Turn Their Own Evidence Judgments into Stopping Decisions},
+  author        = {Zhang, Chubin and Wan, Zhenglin and Yu, Xingrui and Wu, Jingxuan and Zhou, Yaxin and Tsang, Ivor and An, Bo},
+  year          = {2026},
+  eprint        = {2610.06191},
   archivePrefix = {arXiv},
   primaryClass  = {cs.AI},
-  url    = {https://arxiv.org/abs/2610.06191}
+  url           = {https://arxiv.org/abs/2610.06191}
 }
 ```
 
 ## License
 
-Code: MIT. Episode data in `data/`: CC BY 4.0. HotpotQA (CC BY-SA 4.0) and the FEVER claims and Wikipedia pages in `experiments/fever_data.json` (CC BY-SA 3.0)
-keep their original licenses.
+Code: MIT. Episode data in `data/`: CC BY 4.0. HotpotQA (CC BY-SA 4.0) and the FEVER claims and Wikipedia pages in
+`experiments/fever_data.json` (CC BY-SA 3.0) keep their original licenses.

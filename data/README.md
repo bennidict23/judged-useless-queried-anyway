@@ -12,7 +12,7 @@ eps = load_jsonl("data/episodes/test300/qwen3-8b__unaided.jsonl.gz")
 time_matched_contrast([e for e in eps if e["regime"] in FAIL])   # Δ = -0.065 [-0.095, -0.039]
 ```
 
-`python data/reproduce_paper.py` recomputes every Δ in Figure 3 and every mean6 in Table 2 from these files and
+`python data/reproduce_paper.py` recomputes every Δ in Figure 3 and the open models' mean6 in Table 2 from these files and
 checks them against the paper (all 43 cells match).
 
 ## Fields
