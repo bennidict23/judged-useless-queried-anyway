@@ -3,7 +3,7 @@
 import hashlib
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).parent
+PROJECT_ROOT = Path(__file__).resolve().parents[1]   # the experiments directory
 RESULTS_DIR = PROJECT_ROOT / "results"
 RESULTS_DIR.mkdir(exist_ok=True)
 

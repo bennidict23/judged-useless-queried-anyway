@@ -15,6 +15,8 @@ from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent / "core"))   # agent, environment and model modules
 from agent import AgentTrajectory, SYSTEM_PROMPT_V2, SYSTEM_PROMPT, trajectory_to_dict
 from config import MODELS, SEED, stable_seed, MAX_AGENT_STEPS, BATCH_SIZE, SAMPLING_VERSION, SHUFFLE_MODE_DEFAULT
 from data import build_shuffle_pool_v2
@@ -27,7 +29,7 @@ from gate2_intervention import DecisionStep
 from prompt_arms import PROMPT_ARMS, PromptArm, COMBO_ARMS, Combo
 from run_gate2 import REGIMES, CORRUPT
 
-FEVER_CACHE = Path(__file__).parent / 'fever_data.json'
+FEVER_CACHE = Path(__file__).parent / 'manifests' / 'fever_data.json'
 
 V2_SENTENCE = SYSTEM_PROMPT_V2[len(SYSTEM_PROMPT):]  # "Produce exactly one Thought and one Action per turn..."
 FEVER_SYSTEM_PROMPT = """\

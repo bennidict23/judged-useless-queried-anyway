@@ -8,11 +8,11 @@ unaided, budget and enforced-rule conditions on 300 fresh questions (`fresh300/`
 from judged_useless import load_jsonl, time_matched_contrast
 
 FAIL = {"persistent", "recover_after_1", "recover_after_2", "recover_after_3", "late_onset_from_3"}
-eps = load_jsonl("data/episodes/test300/qwen3-8b__unaided.jsonl.gz")
+eps = load_jsonl("experiments/episodes/test300/qwen3-8b__unaided.jsonl.gz")
 time_matched_contrast([e for e in eps if e["regime"] in FAIL])   # Δ = -0.065 [-0.095, -0.039]
 ```
 
-`python data/reproduce_paper.py` recomputes every Δ in Figure 3 and the open models' mean6 in Table 2 from these files and
+`python experiments/reproduce_paper.py` recomputes every Δ in Figure 3 and the open models' mean6 in Table 2 from these files and
 checks them against the paper (all 43 cells match).
 
 ## Fields
@@ -21,7 +21,7 @@ checks them against the paper (all 43 cells match).
 |---|---|
 | `model` | `qwen2.5-7b`, `llama3.1-8b`, `qwen3-8b`, `qwen3-32b` |
 | `condition` | `unaided`, `permit`, `budget`, `stated_rule`, `call_cost`, `decide`, `enforced_rule`, `combo` (Table 1 of the paper) |
-| `split` | `test300` or `fresh300` (question lists in `../experiments/manifests/`) |
+| `split` | `test300` or `fresh300` (question lists in `../manifests/`) |
 | `question_id` | HotpotQA question id |
 | `regime` | `clean`, `persistent`, `recover_after_1/2/3`, `late_onset_from_3`, `plausible` |
 | `actions` | the action at each step: `search`, `lookup`, `finish`, or `invalid` when the agent's turn contained no valid action (it counts as not answering) |

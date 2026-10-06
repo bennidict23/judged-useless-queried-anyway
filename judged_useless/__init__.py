@@ -1,7 +1,7 @@
 """Measure whether a tool-using agent stops on its own evidence judgments, and enforce the integration step.
 
     from judged_useless import load_jsonl, time_matched_contrast
-    print(time_matched_contrast(load_jsonl("examples/qwen3-8b_unaided_test300.jsonl")))
+    print(time_matched_contrast(load_jsonl("my_episodes.jsonl")))
 """
 from .delta import answer_rate_after_run, decision_points, load_jsonl, time_matched_contrast, useless_runs
 from .rule import (FORCE_SYSTEM_SUFFIX, FORCE_USER_MESSAGE, SIDE_CHANNEL_QUESTION, IntegrationRule,

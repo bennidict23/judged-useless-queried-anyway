@@ -8,7 +8,7 @@ from typing import Any
 
 from config import NUM_QUESTIONS, SEED, NUM_DEV_QUESTIONS, DEV_SEED_TAG, stable_seed
 
-HOTPOTQA_CACHE = Path(__file__).parent / "hotpotqa_dev.json"
+HOTPOTQA_CACHE = Path(__file__).resolve().parents[1] / "hotpotqa_dev.json"
 
 
 def download_hotpotqa() -> list[dict[str, Any]]:

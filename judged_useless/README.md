@@ -11,13 +11,13 @@ Log each episode as one JSON line with the agent's actions and its judgment of e
 
 The k-th judgment is about the observation returned by the k-th action, and is USELESS, USEFUL or null. Get it by
 asking a one-word question on a copy of the conversation
-([prompts/08_side_channel_judgment_question.txt](../prompts/08_side_channel_judgment_question.txt)), or read it from
+([experiments/prompts/08_side_channel_judgment_question.txt](../experiments/prompts/08_side_channel_judgment_question.txt)), or read it from
 the agent's own reasoning with `stated_judgment()`.
 
 ```python
 from judged_useless import load_jsonl, time_matched_contrast, answer_rate_after_run
 
-episodes = load_jsonl("my_episodes.jsonl")
+episodes = load_jsonl("my_episodes.jsonl")   # or a file from experiments/episodes/
 time_matched_contrast(episodes)        # {'delta': ..., 'ci_low': ..., 'ci_high': ..., ...}
 answer_rate_after_run(episodes, k=5)   # how often it answers after 5 useless judgments in a row
 ```
@@ -39,14 +39,6 @@ if rule.update(stated_judgment(thought)):   # after each observation, on the age
 
 With `source="stated"`, a USEFUL judgment resets the run and a thought without an explicit judgment leaves it
 unchanged. With `source="side_channel"`, pass the parsed reply to the side-channel question; anything other than
-USELESS resets the run. [harness_example.py](harness_example.py) runs the rule in a complete agent loop, with the
-prompts that switch the agent to answering.
-
-## Files
-
-| file | content |
-|---|---|
-| qwen3-8b_unaided_test300.jsonl | the unaided Qwen3-8B agent on the 300 test questions (Δ = −0.065) |
-| qwen3-8b_enforced_rule_test300.jsonl | the same agent with the enforced rule (Δ = +0.329) |
-| compute_delta.py | Δ and the answer rate after five useless judgments for both |
-| harness_example.py | the integration rule in a minimal agent loop, no model needed |
+USELESS resets the run. When the rule fires, `FORCE_SYSTEM_SUFFIX` and `FORCE_USER_MESSAGE` are the prompts we used
+to switch the agent to answering, and `python run_gate2.py --arm rule_k5_side` in [experiments](../experiments) runs
+the rule in the full environment.

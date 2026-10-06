@@ -10,6 +10,9 @@ from __future__ import annotations
 import argparse, json
 from collections import Counter
 from datetime import datetime, timezone
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent / "core"))   # agent, environment and model modules
 from agent import trajectory_to_dict
 from config import MODELS, NUM_RUBRIC_QUESTIONS, SHUFFLE_MODE_DEFAULT, MAX_AGENT_STEPS
 from data import load_run_data

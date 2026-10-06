@@ -1,3 +1,0 @@
-# Only needed to run agents (experiments/); the toolkit judged_useless has no dependencies.
-vllm>=0.6
-anthropic>=0.40

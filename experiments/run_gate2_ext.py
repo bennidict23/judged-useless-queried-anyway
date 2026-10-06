@@ -17,6 +17,9 @@ import argparse, json, random
 from collections import Counter
 from datetime import datetime, timezone
 
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent / "core"))   # agent, environment and model modules
 from agent import AgentTrajectory, SYSTEM_PROMPT_V2, check_answer, trajectory_to_dict
 from config import MODELS, SEED, stable_seed, MAX_AGENT_STEPS, BATCH_SIZE, SAMPLING_VERSION, SHUFFLE_MODE_DEFAULT
 from data import load_run_data, download_hotpotqa

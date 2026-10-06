@@ -14,6 +14,8 @@ import hashlib
 import json
 from pathlib import Path
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent / "core"))   # agent, environment and model modules
 from config import MODELS
 from gate2_intervention import JUDGE_PROMPT, parse_judgment
 from run_f_branch import decision_points
@@ -39,7 +41,7 @@ def main():
     p.add_argument('--gpu', type=str, default='0')
     p.add_argument('--regimes', nargs='*', default=None)
     p.add_argument('--limit-trajectories', type=int, default=None)
-    args, _ = p.parse_known_args()   # job_pool passes --arm/--model/--tag, which are ignored
+    args, _ = p.parse_known_args()   # extra arguments such as --arm/--model/--tag are ignored
     src = Path(args.run_dir)
     man = json.loads((src / 'run_manifest.json').read_text())
     model_key = man['arguments']['model']

@@ -11,7 +11,7 @@ Chubin Zhang<sup>1</sup>, Zhenglin Wan<sup>2</sup>, Xingrui Yu<sup>3</sup>, Jing
 <br>
 
 [![arXiv](https://img.shields.io/badge/arXiv-2610.06191-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2610.06191)
-[![Data](https://img.shields.io/badge/Data-90k_episodes-2ea44f?style=for-the-badge&logo=json&logoColor=white)](data)
+[![Data](https://img.shields.io/badge/Data-90k_episodes-2ea44f?style=for-the-badge&logo=json&logoColor=white)](experiments/episodes)
 [![Python](https://img.shields.io/badge/Python-3.9%2B_·_no_dependencies-3776ab?style=for-the-badge&logo=python&logoColor=white)](#-quick-start)
 [![License](https://img.shields.io/badge/License-MIT-555555?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
 
@@ -21,7 +21,7 @@ Chubin Zhang<sup>1</sup>, Zhenglin Wan<sup>2</sup>, Xingrui Yu<sup>3</sup>, Jing
 
 <br>
 
-<p align="center"><img src="assets/teaser.png" width="100%"></p>
+<p align="center"><img src="docs/teaser.png" width="100%"></p>
 
 When a tool keeps returning nothing useful, an agent should stop relying on it. The agents we test know when that
 happens, but they do not act on it:
@@ -40,10 +40,9 @@ happens, but they do not act on it:
 
 ```bash
 git clone https://github.com/bennidict23/judged-useless-queried-anyway.git
-cd judged-useless-queried-anyway && pip install -e .
-
-python examples/compute_delta.py   # Δ for two example agents
-python data/reproduce_paper.py     # every Δ in Figure 3
+cd judged-useless-queried-anyway
+python experiments/reproduce_paper.py   # every Δ in Figure 3, from the released episodes
+pip install -e .                        # the toolkit, to measure Δ on your own agent
 ```
 
 ## 🔍 Test your agent
@@ -60,23 +59,23 @@ useless with how often it answers when the latest result was judged useless but 
 | **< 0** | follows earlier useful evidence instead |
 
 To measure it on your own agent, log each episode's actions and the agent's one-word judgment of each observation,
-and pass the episodes to the toolkit. The format and a short example are in [examples/README.md](examples/README.md).
+and pass the episodes to the toolkit. The format and a short example are in [judged_useless/README.md](judged_useless/README.md).
 
 Across the models and conditions in the paper, only the conditions with the enforced rule make Δ positive for every
 model (in parentheses: the replication on 300 fresh questions):
 
-<p align="center"><img src="assets/delta_heatmap.png" width="800"></p>
+<p align="center"><img src="docs/delta_heatmap.png" width="800"></p>
 
 ## 🔧 Add the integration step
 
 Telling the agent more does not make it stop on its judgments, so let the harness do it: once five results in a row
 are judged useless, leave the agent only the answer action. The toolkit's integration rule reads the judgments either
-from a one-word side-channel question or directly from the agent's own reasoning, at no extra cost.
-[examples/harness_example.py](examples/harness_example.py) shows it in a complete agent loop.
+from a one-word side-channel question or directly from the agent's own reasoning, at no extra cost
+([usage](judged_useless/README.md#enforce-the-integration-step)).
 
 ## 📊 Data
 
-[data/episodes](data) holds every episode of the paper's main experiments: four open models in eight conditions on 300
+[experiments/episodes](experiments/episodes) holds every episode of the paper's main experiments: four open models in eight conditions on 300
 test questions, and the replication on 300 fresh questions. Each episode records the agent's actions, its judgment of
 every observation and whether it answered correctly. From these files, the reproduction script recomputes every Δ in
 Figure 3 and the open models' success rates in Table 2 on a CPU in about a minute.
@@ -96,7 +95,7 @@ another question's knowledge base, so whether each result is useful is known by 
 
 Harder failures, longer recoveries, a backup tool and FEVER fact verification are included too. Open models run
 locally with vLLM and Claude models through the Anthropic API. [experiments/README.md](experiments/README.md) gives the
-commands for every model and condition, and every prompt is in [prompts](prompts).
+commands for every model and condition, and every prompt is in [experiments/prompts](experiments/prompts).
 
 ## 📝 Citation
 
