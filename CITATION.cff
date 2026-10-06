@@ -4,6 +4,7 @@ title: "Judged Useless, Queried Anyway: Tool-Using Agents Rarely Turn Their Own 
 type: software
 license: MIT
 repository-code: "https://github.com/bennidict23/judged-useless-queried-anyway"
+url: "https://arxiv.org/abs/2610.06191"
 authors:
   - given-names: Chubin
     family-names: Zhang
@@ -23,6 +24,9 @@ preferred-citation:
   type: article
   title: "Judged Useless, Queried Anyway: Tool-Using Agents Rarely Turn Their Own Evidence Judgments into Stopping Decisions"
   year: 2026
+  journal: "arXiv preprint arXiv:2610.06191"
+  doi: "10.48550/arXiv.2610.06191"
+  url: "https://arxiv.org/abs/2610.06191"
   authors:
     - given-names: Chubin
       family-names: Zhang

@@ -3,6 +3,8 @@
 Code, prompts and data for the paper **Judged Useless, Queried Anyway: Tool-Using Agents Rarely Turn Their Own Evidence Judgments into Stopping Decisions**
 (Chubin Zhang, Zhenglin Wan, Xingrui Yu, Jingxuan Wu, Yaxin Zhou, Ivor Tsang, Bo An).
 
+**Paper:** [arXiv:2610.06191](https://arxiv.org/abs/2610.06191)
+
 When a tool keeps returning nothing useful, an agent should stop relying on it. The agents we test call a failing
 source's results useless almost every time, yet after five such judgments in a row they rarely answer:
 
@@ -147,7 +149,11 @@ The full trajectories (with the agents' text) and the annotation labels will be 
 @misc{zhang2026judgeduseless,
   title  = {Judged Useless, Queried Anyway: Tool-Using Agents Rarely Turn Their Own Evidence Judgments into Stopping Decisions},
   author = {Zhang, Chubin and Wan, Zhenglin and Yu, Xingrui and Wu, Jingxuan and Zhou, Yaxin and Tsang, Ivor and An, Bo},
-  year   = {2026}
+  year   = {2026},
+  eprint = {2610.06191},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  url    = {https://arxiv.org/abs/2610.06191}
 }
 ```
 
