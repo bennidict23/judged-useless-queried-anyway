@@ -62,8 +62,8 @@ useless with how often it answers when the latest result was judged useless but 
 To measure it on your own agent, log each episode's actions and the agent's one-word judgment of each observation,
 and pass the episodes to the toolkit. The format and a short example are in [examples/README.md](examples/README.md).
 
-Across the models and conditions in the paper, only the enforced rule makes Δ positive for every model (in
-parentheses: the replication on 300 fresh questions):
+Across the models and conditions in the paper, only the conditions with the enforced rule make Δ positive for every
+model (in parentheses: the replication on 300 fresh questions):
 
 <p align="center"><img src="assets/delta_heatmap.png" width="800"></p>
 
