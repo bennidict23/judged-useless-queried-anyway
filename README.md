@@ -15,7 +15,7 @@ Chubin Zhang<sup>1</sup>, Zhenglin Wan<sup>2</sup>, Xingrui Yu<sup>3,4‡</sup>,
 [![Python](https://img.shields.io/badge/Python-3.9%2B_·_no_dependencies-3776ab?style=for-the-badge&logo=python&logoColor=white)](#-quick-start)
 [![License](https://img.shields.io/badge/License-MIT-555555?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
 
-🚀 **[Quick start](#-quick-start)** &nbsp;·&nbsp; 🔍 **[Test your agent](#-test-your-agent)** &nbsp;·&nbsp; 🔧 **[Add the integration step](#-add-the-integration-step)** &nbsp;·&nbsp; 📊 **[Reproduce the paper](#-reproduce-the-paper)** &nbsp;·&nbsp; 📝 **[Citation](#-citation)**
+🚀 **[Quick start](#-quick-start)** &nbsp;·&nbsp; 🔍 **[Test your agent](#-test-your-agent)** &nbsp;·&nbsp; 🔧 **[Integration step](#-add-the-integration-step)** &nbsp;·&nbsp; 📊 **[Reproduce](#-reproduce-the-paper)** &nbsp;·&nbsp; 📝 **[Citation](#-citation)**
 
 </div>
 
@@ -132,15 +132,6 @@ actions and whether it answered correctly (43 files, under 1 MB). One command re
 git clone https://github.com/bennidict23/judged-useless-queried-anyway.git
 cd judged-useless-queried-anyway
 python data/reproduce_paper.py
-```
-
-```
-test300: Δ on the agent's own judgments [95% interval], and mean6 success
-model        condition                                Δ   mean6  matches paper
-qwen3-8b     unaided        -0.065 [-0.095, -0.039]   0.448  yes
-qwen3-8b     enforced_rule  +0.329 [+0.286, +0.373]   0.474  yes
-...
-43 of 43 cells match the paper.
 ```
 
 The fields are described in [`data/README.md`](data/README.md). The full trajectories, with the agents' text, and the
