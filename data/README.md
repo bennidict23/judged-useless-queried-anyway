@@ -37,6 +37,4 @@ enforced rule, combo) and replayed on the recorded trajectories otherwise.
 * mean6 is the success averaged with equal weight over `clean` and the five failure regimes.
 * The decide condition was run for the three 7–8B models only.
 
-The full trajectories (with the agents' text) and the annotation labels will be added later.
-
 License: CC BY 4.0.
