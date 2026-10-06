@@ -11,18 +11,18 @@ Chubin Zhang<sup>1</sup>, Zhenglin Wan<sup>2</sup>, Xingrui Yu<sup>3,4‡</sup>,
 <br>
 
 [![arXiv](https://img.shields.io/badge/arXiv-2610.06191-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2610.06191)
-[![Data](https://img.shields.io/badge/Data-90k_episodes-2ea44f?style=for-the-badge)](data)
+[![Data](https://img.shields.io/badge/Data-90k_episodes-2ea44f?style=for-the-badge&logo=json&logoColor=white)](data)
 [![Python](https://img.shields.io/badge/Python-3.9%2B_·_no_dependencies-3776ab?style=for-the-badge&logo=python&logoColor=white)](#quick-start)
-[![License](https://img.shields.io/badge/License-MIT-555555?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-555555?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
 
-**[Quick start](#quick-start)** &nbsp;·&nbsp; **[Test your agent](#test-your-agent)** &nbsp;·&nbsp; **[Add the integration step](#add-the-integration-step)** &nbsp;·&nbsp; **[Reproduce the paper](#reproduce-the-paper)** &nbsp;·&nbsp; **[Citation](#citation)**
+🚀 **[Quick start](#-quick-start)** &nbsp;·&nbsp; 🔍 **[Test your agent](#-test-your-agent)** &nbsp;·&nbsp; 🔧 **[Add the integration step](#-add-the-integration-step)** &nbsp;·&nbsp; 📊 **[Reproduce the paper](#-reproduce-the-paper)** &nbsp;·&nbsp; 📝 **[Citation](#-citation)**
 
 </div>
 
 <br>
 
-<p align="center"><img src="assets/judged_vs_answered.png" width="420"></p>
-<p align="center"><sub>Red: how often each agent judged a failing source's result useless. Gray: how often the unaided agent answered after five useless judgments in a row.</sub></p>
+<p align="center"><img src="assets/teaser.png" width="100%"></p>
+<p align="center"><sub><b>Left:</b> a real trajectory of Claude Haiku 4.5 with a persistently failing source. It calls every result irrelevant and recalls at step 6 that Barlow is in a band, yet searches until its budget runs out; with the enforced rule, it answers correctly. <b>Right:</b> how often each agent judged a failing source's result useless (red), and how often the unaided agent answered after five useless judgments in a row (gray). *Judgments from its enforced-rule run on the same questions.</sub></p>
 
 When a tool keeps returning nothing useful, an agent should stop relying on it. The agents we test know when that
 happens, but they do not act on it:
@@ -37,7 +37,7 @@ happens, but they do not act on it:
 - **The pattern replicates** on 300 fresh questions and on fact verification. A larger open model, a reasoning mode
   and an RL-trained search agent still largely fail to stop on the evidence.
 
-## Quick start
+## 🚀 Quick start
 
 ```bash
 pip install git+https://github.com/bennidict23/judged-useless-queried-anyway
@@ -45,13 +45,13 @@ pip install git+https://github.com/bennidict23/judged-useless-queried-anyway
 
 | I want to ... | See |
 |---|---|
-| test whether my agent's stopping follows its own judgments of its evidence | [Test your agent](#test-your-agent) |
-| make my agent stop on them | [Add the integration step](#add-the-integration-step) |
-| reproduce the main results (Figure 3, Table 2) from the released episodes, on a CPU in about a minute | [Reproduce the paper](#reproduce-the-paper) |
-| run a model in the controlled source-failure environment (HotpotQA, FEVER) | [Run the environment](#run-the-environment) |
-| reuse the prompts: agent, conditions, side-channel question, belief probe | [`prompts/`](prompts) |
+| test whether my agent's stopping follows its own judgments of its evidence | 🔍 [Test your agent](#-test-your-agent) |
+| make my agent stop on them | 🔧 [Add the integration step](#-add-the-integration-step) |
+| reproduce the main results (Figure 3, Table 2) from the released episodes, on a CPU in about a minute | 📊 [Reproduce the paper](#-reproduce-the-paper) |
+| run a model in the controlled source-failure environment (HotpotQA, FEVER) | 🧪 [Run the environment](#-run-the-environment) |
+| reuse the prompts: agent, conditions, side-channel question, belief probe | 💬 [`prompts/`](prompts) |
 
-## Test your agent
+## 🔍 Test your agent
 
 Success alone cannot tell you what an agent's stopping responds to: an agent that stops at a fixed step, one that
 waits for the deadline and one that stops after enough useless evidence can score alike. The **time-matched contrast
@@ -88,7 +88,7 @@ the agent's own reasoning at no extra cost with `stated_judgment()`.
 <p align="center"><sub>Δ for every model and condition in the paper (blue: Δ > 0, red: Δ < 0; replication on 300 fresh questions in parentheses). Only the enforced rule, alone or combined with the budget, makes Δ positive for every model.</sub></p>
 
 <details>
-<summary><b>Which decisions Δ uses</b></summary>
+<summary><b>📐 Which decisions Δ uses</b></summary>
 <br>
 
 Δ pools the decisions after 3 to 6 observations (`t_min`, `t_max`) and leaves out the final action of the
@@ -98,7 +98,7 @@ episodes in which it fails later or recovers. Cells are pooled with Mantel–Hae
 from a bootstrap over questions.
 </details>
 
-## Add the integration step
+## 🔧 Add the integration step
 
 Let the harness, not the prompt, turn the agent's judgments into the stopping decision:
 
@@ -122,7 +122,7 @@ for step in episode:
 
 A runnable toy example is in [`examples/harness_example.py`](examples/harness_example.py).
 
-## Reproduce the paper
+## 📊 Reproduce the paper
 
 [`data/episodes/`](data) holds every episode of the paper's main experiments: four open models in eight conditions on
 300 test questions, and the replication on 300 fresh questions, with the agent's judgment of every observation, its
@@ -146,7 +146,7 @@ qwen3-8b     enforced_rule  +0.329 [+0.286, +0.373]   0.474  yes
 The fields are described in [`data/README.md`](data/README.md). The full trajectories, with the agents' text, and the
 annotation labels will be added later.
 
-## Run the environment
+## 🧪 Run the environment
 
 Questions come from the HotpotQA distractor development set, each with its own knowledge base of ten paragraphs. The
 agent has `search`, `lookup` and `finish` and a budget of eight actions. A failed observation is replaced by a
@@ -172,7 +172,7 @@ python evaluate.py results_v2/<run dir>      # success per regime, mean6 and Δ
 Every condition, model and script is listed in [`experiments/README.md`](experiments/README.md).
 
 <details>
-<summary><b>Repository layout</b></summary>
+<summary><b>📁 Repository layout</b></summary>
 <br>
 
 ```
@@ -184,7 +184,7 @@ data/             every episode of the paper's main experiments, and the script 
 ```
 </details>
 
-## Citation
+## 📝 Citation
 
 ```bibtex
 @misc{zhang2026judgeduseless,
@@ -198,7 +198,7 @@ data/             every episode of the paper's main experiments, and the script 
 }
 ```
 
-## License
+## 📜 License
 
 Code: MIT. Episode data in `data/`: CC BY 4.0. HotpotQA (CC BY-SA 4.0) and the FEVER claims and Wikipedia pages in
 `experiments/fever_data.json` (CC BY-SA 3.0) keep their original licenses.
