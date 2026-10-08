@@ -19,17 +19,23 @@ checks them against the paper (all 43 cells match).
 
 | field | meaning |
 |---|---|
-| `model` | `qwen2.5-7b`, `llama3.1-8b`, `qwen3-8b`, `qwen3-32b` |
+| `model` | `qwen2.5-7b` (Qwen2.5-7B-Instruct), `llama3.1-8b` (Llama-3.1-8B-Instruct), `qwen3-8b` (Qwen3-8B), `qwen3-32b` (Qwen3-32B); the Qwen3 models in non-thinking mode |
 | `condition` | `unaided`, `permit`, `budget`, `stated_rule`, `call_cost`, `decide`, `enforced_rule`, `combo` (Table 1 of the paper) |
 | `split` | `test300` or `fresh300` (question lists in `../manifests/`) |
-| `question_id` | HotpotQA question id |
-| `regime` | `clean`, `persistent`, `recover_after_1/2/3`, `late_onset_from_3`, `plausible` |
-| `actions` | the action at each step: `search`, `lookup`, `finish`, or `invalid` when the agent's turn contained no valid action (it counts as not answering) |
-| `judgments` | the agent's judgment of each observation (`judgments[k]` judges the observation returned by `actions[k]`): `USELESS`, `USEFUL`, `UNPARSED` (a reply with neither word, 4 cases), or `null` where no judgment was elicited, e.g. after the final action or in regimes where judgments were not replayed |
+| `question_id` | HotpotQA question id (distractor development set) |
+| `regime` | which observations fail: `clean`, `persistent`, `recover_after_1/2/3`, `late_onset_from_3`, `plausible` |
+| `actions` | the action at each step: `search`, `lookup`, `finish`, or `invalid` for an action the environment does not support (it replies with an error message, and the step counts toward the budget of eight) |
+| `judgments` | the agent's one-word judgment of the observation returned by each action other than `finish`: `USELESS`, `USEFUL`, `UNPARSED` (a reply with neither word, 4 cases), or null (see below) |
 | `success` | whether the final answer is correct (token F1 ≥ 0.6) |
+| `termination` | `answered` (the last action is `finish`), `budget_exhausted` (eight actions without `finish`), `format_failure` (a turn with no parsable action) or `generation_truncated` (a turn cut off at the token limit); the last two end the episode without an answer, in 41 episodes at the first turn, so their `actions` are empty |
 
-Judgments are the agent's side-channel judgments: recorded during the run in the conditions that use them (decide,
-enforced rule, combo) and replayed on the recorded trajectories otherwise.
+Judgments come from the side-channel question: recorded during the run in the conditions that use them (decide,
+enforced rule, combo) and replayed on the recorded trajectories otherwise. A judgment is null in two cases:
+
+* in the replayed conditions, judgments were replayed for the five failure regimes only, so `clean` and `plausible`
+  episodes have none;
+* in the recorded conditions, when the budget runs out, the observation returned by the eighth action precedes no
+  further decision and is not judged.
 
 ## Notes
 
