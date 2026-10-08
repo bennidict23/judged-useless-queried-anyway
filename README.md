@@ -11,7 +11,7 @@ Chubin Zhang<sup>1</sup>, Zhenglin Wan<sup>2</sup>, Xingrui Yu<sup>3</sup>, Jing
 <br>
 
 [![arXiv](https://img.shields.io/badge/arXiv-2610.06191-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2610.06191)
-[![Data](https://img.shields.io/badge/Data-90k_episodes-2ea44f?style=for-the-badge&logo=json&logoColor=white)](experiments/episodes)
+[![Data](https://img.shields.io/badge/Data-90k_episodes-ff9d00?style=for-the-badge&logo=huggingface&logoColor=white)](https://huggingface.co/datasets/benni23/judged-useless-episodes)
 [![Python](https://img.shields.io/badge/Python-3.9%2B_·_no_dependencies-3776ab?style=for-the-badge&logo=python&logoColor=white)](#-quick-start)
 [![License](https://img.shields.io/badge/License-MIT-555555?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
 
@@ -78,7 +78,8 @@ from a one-word side-channel question or directly from the agent's own reasoning
 [experiments/episodes](experiments/episodes) holds every episode of the paper's main experiments: four open models in eight conditions on 300
 test questions, and the replication on 300 fresh questions. Each episode records the agent's actions, its judgment of
 every observation and whether it answered correctly. From these files, the reproduction script recomputes every Δ in
-Figure 3 and the open models' success rates in Table 2 on a CPU in about a minute.
+Figure 3 and the open models' success rates in Table 2 on a CPU in about a minute. The same episodes are on
+[Hugging Face](https://huggingface.co/datasets/benni23/judged-useless-episodes), where they can be browsed and loaded with `load_dataset`.
 
 ## 🧪 Source-failure environment
 

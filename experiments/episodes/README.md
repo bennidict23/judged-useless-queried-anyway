@@ -1,7 +1,7 @@
 # Episodes
 
 The behaviour of every model in every condition of the paper's main experiments, one record per episode, in the
-toolkit's format. 43 files: four open models × eight conditions on the 300 test questions (`test300/`), and the
+toolkit's format (also on [Hugging Face](https://huggingface.co/datasets/benni23/judged-useless-episodes)). 43 files: four open models × eight conditions on the 300 test questions (`test300/`), and the
 unaided, budget and enforced-rule conditions on 300 fresh questions (`fresh300/`).
 
 ```python
